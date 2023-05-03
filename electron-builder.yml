@@ -1,0 +1,24 @@
+productName: mermaid-electron
+copyright: Copyright © 2023 whinee
+appId: dev.whinyaan.mmde
+
+directories:
+  output: dist
+  buildResources: build
+files:
+  - filter:
+      - node_modules/**/*
+      - src/**/*
+artifactName: ${productName}.${ext}
+
+compression: store
+asar: false
+
+win:
+  target: portable
+
+linux:
+  target: appimage
+
+mac:
+  target: dmg

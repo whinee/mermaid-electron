@@ -1,0 +1,21 @@
+{
+    "name": "mermaid-electron",
+    "description": "",
+    "author": "whinee",
+    "version": "0.0.1",
+    "license": "MIT",
+    "main": "src/electron.js",
+    "scripts": {
+        "start": "electron src/electron.js",
+        "dev": "NODE_ENV=development electron src/electron.js"
+    },
+    "devDependencies": {
+        "electron": "^24.1.1",
+        "electron-builder": "^23.6.0"
+    },
+    "dependencies": {
+        "electron-is-dev": "^2.0.0",
+        "mermaid": "^10.1.0",
+        "yargs": "^17.7.1"
+    }
+}

@@ -1,0 +1,96 @@
+name: Build
+on:
+  push:
+    paths:
+      - version.yml
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Python3.10
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.10"
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: latest
+          release_name: mermaid-electron Latest Release
+          draft: false
+          prerelease: false
+  linux:
+    name: Linux
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Install just
+        uses: taiki-e/install-action@just
+      - name: Build
+        run: |-
+          just bootstrap
+          just build
+      - name: Upload .AppImage
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{needs.release.outputs.upload_url}}
+          asset_path: dist/mermaid-electron.AppImage
+          asset_name: mermaid-electron.AppImage
+          asset_content_type: application/octet
+  win:
+    name: Windows
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Install just
+        uses: taiki-e/install-action@just
+      - name: Build
+        run: |-
+          just bootstrap
+          just build
+      - name: Upload .exe
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{needs.release.outputs.upload_url}}
+          asset_path: dist/mermaid-electron.exe
+          asset_name: mermaid-electron.exe
+          asset_content_type: application/octet
+  mac:
+    name: MacOS
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Install just
+        uses: taiki-e/install-action@just
+      - name: Build
+        run: |-
+          just bootstrap
+          just build
+      - name: Upload .exe
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{needs.release.outputs.upload_url}}
+          asset_path: dist/mermaid-electron.exe
+          asset_name: mermaid-electron.exe
+          asset_content_type: application/octet

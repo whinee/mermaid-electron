@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+
+<head>
+    <script type="module" charset="utf-8">
+        const { ipcRenderer } = require('electron');
+        window.onerror = function (message, source, lineno, colno, error) {
+            ipcRenderer.send('error',`
+Renderer error: ${message}
+         Error: ${error}
+        Source: ${source}
+  Line, Column: ${lineno}, ${colno}`
+            )
+        };
+    </script>
+    <script type="module" src="renderer.js"></script>
+</head>
+
+<body>
+</body>
+
+</html>
