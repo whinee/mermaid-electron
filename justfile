@@ -75,3 +75,7 @@ lint:
 push:
     git add .
     git commit -m "push"
+    git push -u origin main
+
+build:
+    yarn electron-builder
