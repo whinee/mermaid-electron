@@ -45,6 +45,19 @@ Website: [mmde.whinyaan.xyz](https://mmde.whinyaan.xyz)
 
 Github: [github.com/whinee/mermaid-electron](https://github.com/whinee/mermaid-electron)
 
+PayPal.me: [paypal.me/whinyaan](https://paypal.me/whinyaan)
+
+PayPal Donate: [paypal.com/donate/?hosted_button_id=9YR5JDDEQABKG](https://paypal.com/donate/?hosted_button_id=9YR5JDDEQABKG)
+
+---
+
+## Donate
+
+If you like the following tutorial, please consider donating to me through the following mediums. Each cent will go to development of other wonderful tutorials like this, other open source programs like in my [Github Account](https://github.com/whinee), and to my schooling. I am a 17 year old self-taught programmer and will go next year to a state university to study computer science. While it is free, my living expenses will be not. So yeah, even a cent will be appreciated.
+
+- PayPal.me: [paypal.me/whinyaan](https://paypal.me/whinyaan)
+- PayPal Donate: [paypal.com/donate/?hosted_button_id=9YR5JDDEQABKG](https://paypal.com/donate/?hosted_button_id=9YR5JDDEQABKG)
+
 ---
 
 To be updated, be sure to watch this repository and join the [Discord Support Server](https://discord.com/invite/JbAtUxGcJZ) for this and other projects.
@@ -61,7 +74,7 @@ mermaid-electron converts [Mermaid.js](https://mermaid.js.org/) code into images
 
 mermaid-electron accepts a json of array of mermaid code, then spits an array of base64 png.
 
-Check `example.py` on how you can use mermaid-electron.
+Check `example/main.py` on how you can use mermaid-electron.
 
 ## How It Works
 

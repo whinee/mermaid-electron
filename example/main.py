@@ -10,7 +10,7 @@ from typing import Any
 from PIL import Image, ImageOps
 
 try:
-    from .validate import validate_mermaid_config
+    from validate import validate_mermaid_config
 except ImportError:
     from example.validate import validate_mermaid_config
 

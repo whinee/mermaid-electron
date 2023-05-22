@@ -2,6 +2,9 @@ productName: mermaid-electron
 copyright: Copyright © 2023 whinee
 appId: dev.whinyaan.mmde
 
+publish:
+  provider: generic
+
 directories:
   output: dist
   buildResources: build
