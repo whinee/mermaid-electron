@@ -78,4 +78,4 @@ push:
     git push
 
 build:
-    yarn electron-builder
+    yarn electron-builder -p never
