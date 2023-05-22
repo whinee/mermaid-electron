@@ -93,10 +93,10 @@ class MermaidDiagram(BaseModel):
 
 
 class AppConfig(BaseModel):
-    margin: Optional[StrictInt] = 20
+    margin: Optional[StrictInt | StrictFloat] = 20
     max_width: Optional[StrictInt] = -1
     width: Optional[StrictInt] = -1
-    zoom: Optional[StrictFloat] = 1
+    zoom: Optional[StrictInt | StrictFloat] = 1
 
     class Config:
         extra = pydantic.Extra.forbid

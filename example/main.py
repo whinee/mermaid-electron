@@ -5,7 +5,7 @@ import shlex
 import subprocess
 from collections.abc import Callable, Collection
 from io import BytesIO
-from typing import Any
+from typing import Any, Union
 
 from PIL import Image, ImageOps
 
@@ -15,12 +15,11 @@ except ImportError:
     from example.validate import validate_mermaid_config
 
 # Types
-CONFIG_TYPE = bool | int | str | dict[str, bool | int | str]
+CONFIG_TYPE = bool | int | str | dict[str, Union[bool, int, str, "CONFIG_TYPE"]]
 MMD_LS_TYPE = list[dict[str, str | Collection[str] | CONFIG_TYPE]]
 
 # Constants
-CMD = "./dist/mermaid-electron.AppImage"
-# CMD = "yarn -s electron --trace-warnings src/electron.js"
+CMD = "yarn -s electron --trace-warnings src/electron.js"
 
 
 def b64_2_image(vdata: dict[str, Any]) -> Callable[..., None]:
