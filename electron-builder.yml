@@ -21,4 +21,4 @@ linux:
   target: appimage
 
 mac:
-  target: zip
+  target: dmg

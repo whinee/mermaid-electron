@@ -97,12 +97,12 @@ jobs:
         run: |-
           just bootstrap
           just build
-      - name: Upload .zip
+      - name: Upload .dmg
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{needs.release.outputs.upload_url}}
-          asset_path: dist/mermaid-electron.zip
-          asset_name: mermaid-electron.zip
+          asset_path: dist/mermaid-electron.dmg
+          asset_name: mermaid-electron.dmg
           asset_content_type: application/octet
