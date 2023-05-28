@@ -18,6 +18,18 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: "3.10"
+      - name: Delete Existing Release
+        shell: bash --noprofile --norc {0}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          release_name="mermaid-electron Latest Release"
+          release_id=$(curl -s -X GET -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/releases" | jq ".[] | select(.name == \"$release_name\") | .id")
+          if [ ! -z "$release_id" ]; then
+            curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/releases/$release_id"
+          else
+            echo "Release not found."
+          fi
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1

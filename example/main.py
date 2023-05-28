@@ -1,11 +1,12 @@
 import base64
+import hashlib
 import json
 import multiprocessing.dummy as mp
 import shlex
 import subprocess
 from collections.abc import Callable, Collection
 from io import BytesIO
-from typing import Any, Union
+from typing import Any, Optional, Union
 
 from PIL import Image, ImageOps
 
@@ -19,7 +20,20 @@ CONFIG_TYPE = bool | int | str | dict[str, Union[bool, int, str, "CONFIG_TYPE"]]
 MMD_LS_TYPE = list[dict[str, str | Collection[str] | CONFIG_TYPE]]
 
 # Constants
+
+## Parameters
 CMD = "yarn -s electron --trace-warnings src/electron.js"
+
+## Program Constants
+RESULTS_MD = """# Results
+
+| Index | Checksum                         | Expected Checksum                | Matching? |
+|:-----:|:--------------------------------:|:--------------------------------:|:---------:|
+"""
+
+
+def calculate_checksum(data: str) -> str:
+    return hashlib.md5(data.encode()).hexdigest()  # noqa: S324
 
 
 def b64_2_image(vdata: dict[str, Any]) -> Callable[..., None]:
@@ -54,6 +68,7 @@ def b64_2_image(vdata: dict[str, Any]) -> Callable[..., None]:
             color="white",
         )
 
+
         # Then paste the image in the center, and afterwards save the image
         bordered_img.paste(cropped_img, (margin, margin))
         bordered_img.save(f"screenshot-{idx}.png")
@@ -62,6 +77,11 @@ def b64_2_image(vdata: dict[str, Any]) -> Callable[..., None]:
 
 
 def run_mermaid_electron(cmd: str, data: dict[str, Any]) -> None:
+    cs_ls = []
+    results = []
+
+    expected_cs_ls = [i.pop("checksum") for i in data["mmd"]]
+
     vdata = validate_mermaid_config(data)
 
     img_fn = b64_2_image(vdata)
@@ -86,6 +106,36 @@ def run_mermaid_electron(cmd: str, data: dict[str, Any]) -> None:
     p.close()
     p.join()
 
+    for expected, (idx, img_b64) in zip(expected_cs_ls, enumerate(img_ls), strict=True):
+        matching: Optional[bool] = None
+
+        r_cs: str = calculate_checksum(img_b64)
+
+        cs_ls.append(r_cs)
+
+        if expected:
+            matching = r_cs == expected
+            print(idx, matching)
+        else:
+            expected = ""
+
+        results.append(
+            [
+                "{: <5}".format(str(idx)),
+                "{: <32}".format(str(r_cs)),
+                "{: <32}".format(str(expected)),
+                "{: <9}".format(str("N/A" if matching is None else matching)),
+            ],
+        )
+
+    with open("results.md", "w") as f:
+        f.write(
+            RESULTS_MD
+            + "\n".join(
+                ["| " + " | ".join([str(j) for j in i]) + " |" for i in results],
+            ),
+        )
+
 
 mmd_ls = [
     {
@@ -100,17 +150,20 @@ mmd_ls = [
     another task : 24d
 """,
         "config": {"theme": "forest"},
+        "checksum": "010f8556485aa9778bb1a9b465f7057a",
     },
     {
         "code": """flowchart TD
         intro --> tt
     """,
         "config": {"theme": "forest"},
+        "checksum": "182815483826ffac4d2044d8db2de019",
     },
     {
         "code": """flowchart TD
         intro --> tt
     """,
+        "checksum": "dd21cf872491bfe2003e5c53997dfed1",
     },
 ]
 

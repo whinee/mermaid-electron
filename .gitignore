@@ -6,7 +6,7 @@ squashfs-root/
 **/tmp/
 
 # User-defined Ignored Files
-tr.yml
+results.md
 yarn.lock
 yarn-error.log
 **/*.AppImage

@@ -72,9 +72,9 @@ lint:
     @ just time "          Python Files Formatted" "  Formatting Python Files Failed" {{ python }} -m black -q .
     @ just time "             Python Files Linted" "     Linting Python Files Failed" just ruff
 
-push:
+push msg='push':
     git add .
-    git commit -m "push"
+    git commit -m '{{ msg }}'
     git push
 
 build:
