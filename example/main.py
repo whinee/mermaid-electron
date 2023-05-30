@@ -68,7 +68,6 @@ def b64_2_image(vdata: dict[str, Any]) -> Callable[..., None]:
             color="white",
         )
 
-
         # Then paste the image in the center, and afterwards save the image
         bordered_img.paste(cropped_img, (margin, margin))
         bordered_img.save(f"screenshot-{idx}.png")

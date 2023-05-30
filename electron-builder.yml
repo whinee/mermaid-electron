@@ -14,8 +14,14 @@ artifactName: ${productName}.${ext}
 compression: store
 asar: false
 
+forceCodeSigning: false
+
 win:
   target: portable
+  publisherName: null
+  certificateFile: null
+  verifyUpdateCodeSignature: false
+  signAndEditExecutable: false
 
 linux:
   target: appimage
