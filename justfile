@@ -71,6 +71,7 @@ bootstrap:
     {{ python }} -m pip install --upgrade pip poetry
     {{ python }} -m poetry install --with dev
     {{ python }} -m pip cache purge
+    yarn install
 
 # Set up development environment
 [windows]
@@ -84,6 +85,7 @@ bootstrap:
     {{ python }} -m pip install --upgrade pip poetry
     {{ python }} -m poetry install --with dev
     {{ python }} -m pip cache purge
+    yarn install
 
 # Lint codebase
 lint:
