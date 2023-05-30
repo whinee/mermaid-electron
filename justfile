@@ -6,12 +6,15 @@ purple_msg := '\e[38;2;151;120;211m%s\e[0m'
 time_msg := '\e[38;2;151;120;211m%s\e[0m: %.2fs\n'
 
 # Derived Constants
-cwd := `python -c 'import os;print(os.getcwd())'`
 system_python := if os_family() == "windows" { "py.exe -3.10" } else { "python3.10" }
-pyenv_dir := cwd + if os_family() == "windows" { "\\pyenv" } else { "/pyenv" }
-pyenv_bin_dir := pyenv_dir + if os_family() == "windows" { "\\Scripts" } else { "/bin" }
-python := pyenv_bin_dir + if os_family() == "windows" { "\\python.exe" } else { "/python3" }
-pyenv_activate := pyenv_bin_dir + if os_family() == "windows" { "\\Activate.ps1" } else { "/activate" }
+pyenv_dir := if os_family() == "windows" { ".\\\\pyenv" } else { "./pyenv" }
+pyenv_bin_dir := pyenv_dir + if os_family() == "windows" { "\\\\Scripts" } else { "/bin" }
+python := pyenv_bin_dir + if os_family() == "windows" { "\\\\python.exe" } else { "/python3" }
+pyenv_activate := pyenv_bin_dir + (if os_family() == "windows" { "\\\\Activate.ps1" } else { "/activate" })
+pyenv_activate_cmd := (if os_family() == "windows" { "" } else { "source " }) + pyenv_activate
+
+# Program Arguments
+set windows-shell := ["powershell.exe", "-Command"]
 
 # Choose recipes
 default:
@@ -55,17 +58,32 @@ ruff:
     @ {{ python }} -m ruff check . --fix; exit 0
 
 # Set up development environment
+[linux]
+[macos]
+[unix]
 bootstrap:
     #!/usr/bin/env bash
     rm -rf poetry.lock
     if test ! -e pyenv; then
         {{ system_python }} -m venv pyenv
-        source {{pyenv_activate}}
+        {{pyenv_activate_cmd}}
     fi
     {{ python }} -m pip install --upgrade pip poetry
     {{ python }} -m poetry install --with dev
     {{ python }} -m pip cache purge
-    yarn install
+
+# Set up development environment
+[windows]
+bootstrap:
+    #!powershell.exe
+    Remove-Item -Recurse poetry.lock
+    if (-not (Test-Path pyenv)) {
+        {{ system_python }} -m venv pyenv
+        {{pyenv_activate_cmd}}
+    }
+    {{ python }} -m pip install --upgrade pip poetry
+    {{ python }} -m poetry install --with dev
+    {{ python }} -m pip cache purge
 
 # Lint codebase
 lint:
